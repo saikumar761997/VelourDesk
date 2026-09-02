@@ -624,7 +624,7 @@ textarea { resize: vertical; }
           <div>
             <label for="phone">Phone</label>
             <input type="tel" id="phone" name="phone" autocomplete="tel" required
-              inputmode="tel" maxlength="16" placeholder="+1 (000) 000-0000">
+              inputmode="tel" maxlength="20" placeholder="+1 (000) 000-0000">
           </div>
           <div>
             <label for="email">Email</label>
@@ -730,19 +730,21 @@ document.querySelectorAll(".plan-cta").forEach((btn) => {
   });
 });
 
-// ===== Phone auto-format =====
+// ===== Phone auto-format (on blur only — reformatting while typing breaks the cursor on mobile) =====
 const phoneInput = document.getElementById("phone");
-phoneInput.addEventListener("input", () => {
-  let digits = phoneInput.value.replace(/\D/g, "");
-  if (digits.length > 0 && digits[0] === "1") digits = digits.slice(1);
+function formatPhoneDisplay(raw) {
+  let digits = raw.replace(/\D/g, "");
+  if (digits.length > 10 && digits[0] === "1") digits = digits.slice(1);
   digits = digits.slice(0, 10);
-
-  let formatted = "";
-  if (digits.length > 0) formatted = "+1 (" + digits.slice(0, 3);
-  if (digits.length >= 3) formatted += ") " + digits.slice(3, 6);
-  if (digits.length >= 6) formatted += "-" + digits.slice(6, 10);
-
-  phoneInput.value = formatted;
+  if (digits.length === 0) return "";
+  let out = "+1 (" + digits.slice(0, 3);
+  if (digits.length >= 3) out += ") " + digits.slice(3, 6);
+  if (digits.length >= 6) out += "-" + digits.slice(6, 10);
+  return out;
+}
+phoneInput.addEventListener("blur", () => {
+  const formatted = formatPhoneDisplay(phoneInput.value);
+  if (formatted) phoneInput.value = formatted;
 });
 
 // ===== Lead form submission =====
