@@ -17,7 +17,412 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<style>
+/* ===== Tokens ===== */
+:root {
+  --violet: #6C4BF6;
+  --violet-dark: #5836E8;
+  --violet-tint: #F1EEFE;
+  --ink: #1A1A1A;
+  --ink-soft: #55555F;
+  --ink-faint: #8A8A93;
+  --bg: #FFFFFF;
+  --bg-alt: #FAFAF9;
+  --border: #E7E7EC;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-card: 0 1px 2px rgba(20,20,30,0.04), 0 1px 1px rgba(20,20,30,0.03);
+  --max: 1120px;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ===== Reset ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+button { font-family: inherit; }
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--violet);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 0 0 8px 0;
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+
+/* ===== Type scale ===== */
+h1, h2, h3 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: 1.08; }
+h2 { font-size: clamp(1.75rem, 3.4vw, 2.5rem); line-height: 1.15; }
+h3 { font-size: 1.15rem; font-weight: 600; }
+
+.eyebrow {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 14px;
+}
+.eyebrow-pill {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--violet);
+  background: var(--violet-tint);
+  padding: 7px 16px;
+  border-radius: 999px;
+  margin-bottom: 24px;
+}
+.section-sub {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  max-width: 620px;
+  margin-top: 14px;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 13px 26px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+.btn-primary {
+  background: var(--violet);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--violet-dark); }
+.btn-outline {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--ink);
+}
+.btn-outline:hover { border-color: var(--violet); color: var(--violet); }
+.btn-sm { padding: 9px 18px; font-size: 0.88rem; }
+.btn-full { width: 100%; padding: 15px 26px; font-size: 1rem; }
+.btn-link {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  border-bottom: 1px solid transparent;
+}
+.btn-link:hover { color: var(--violet); border-color: var(--violet); }
+
+/* ===== Nav ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+.logo img { height: 26px; width: auto; }
+
+/* ===== Hero ===== */
+.hero { padding: 96px 0 88px; }
+.hero-inner { max-width: 760px; }
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+  margin-top: 18px;
+  max-width: 560px;
+}
+.hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 34px;
+  flex-wrap: wrap;
+}
+
+/* ===== Proof ===== */
+.proof { padding: 88px 0; background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.proof-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 24px;
+  margin-top: 44px;
+  align-items: start;
+}
+.proof-shot {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.proof-shot img { width: 100%; height: auto; }
+.proof-shot figcaption {
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--border);
+}
+.proof-shot-side { align-self: center; }
+.proof-quote {
+  margin-top: 40px;
+  padding: 28px 32px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.proof-quote p { font-size: 1.2rem; font-style: italic; }
+.proof-quote cite { display: block; margin-top: 12px; font-style: normal; color: var(--ink-soft); font-size: 0.9rem; }
+
+/* ===== Included ===== */
+.included { padding: 96px 0; }
+.included-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px 32px;
+  margin-top: 48px;
+}
+.included-item .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--violet-tint);
+  color: var(--violet);
+  margin-bottom: 16px;
+  transition: transform 0.18s ease;
+}
+.included-item:hover .icon {
+  transform: translateY(-2px) scale(1.04);
+}
+.included-item .icon svg { width: 22px; height: 22px; }
+.included-item h3 { display: flex; align-items: center; gap: 8px; }
+.included-item p { color: var(--ink-soft); margin-top: 6px; font-size: 0.98rem; }
+.tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+/* ===== Why different ===== */
+.different { padding: 80px 0; background: var(--ink); }
+.different-inner { max-width: 680px; }
+.different .eyebrow { color: #B9A6FF; }
+.different h2 { color: #fff; }
+.different .section-sub { color: #C7C7D1; }
+
+/* ===== Pricing ===== */
+.pricing { padding: 96px 0; background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+  align-items: stretch;
+}
+.plan {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.plan:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(20,20,30,0.08);
+}
+.plan-featured {
+  border-color: var(--violet);
+  box-shadow: 0 4px 24px rgba(108,75,246,0.14);
+}
+.plan-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--violet);
+  background: var(--violet-tint);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+.plan-badge-muted { color: var(--ink-faint); background: var(--bg-alt); border: 1px solid var(--border); }
+.plan h3 { min-height: 28px; }
+.price { margin-top: 16px; font-size: 1rem; color: var(--ink-soft); }
+.price span { font-size: 2.4rem; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; }
+.fee { font-size: 0.85rem; color: var(--ink-faint); margin-top: 4px; }
+.plan ul { margin: 24px 0 28px; display: flex; flex-direction: column; gap: 11px; }
+.plan li {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  padding-left: 22px;
+  position: relative;
+}
+.plan li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 10px;
+  height: 6px;
+  border-left: 2px solid var(--violet);
+  border-bottom: 2px solid var(--violet);
+  transform: rotate(-45deg);
+}
+.plan-cta { margin-top: auto; width: 100%; }
+
+/* ===== Request form ===== */
+.request { padding: 96px 0 120px; }
+.request-inner { max-width: 560px; }
+#lead-form { margin-top: 40px; }
+.form-row { margin-bottom: 20px; }
+.form-row-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-row-split .form-row { margin-bottom: 0; }
+label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 7px; color: var(--ink); }
+input, select, textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.98rem;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--ink);
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px var(--violet-tint);
+}
+textarea { resize: vertical; }
+.form-status {
+  margin-top: 16px;
+  font-size: 0.92rem;
+  min-height: 1.4em;
+}
+.form-status[data-state="success"] { color: #1E7A3D; }
+.form-status[data-state="error"] { color: #C0392B; }
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.checkbox-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.checkbox-item:has(input:checked) {
+  border-color: var(--violet);
+  color: var(--violet);
+  background: var(--violet-tint);
+}
+.checkbox-item input {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--violet);
+}
+
+/* ===== Footer ===== */
+.footer { padding: 56px 0 32px; border-top: 1px solid var(--border); }
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-bottom: 32px;
+}
+.footer-brand img { margin-bottom: 10px; }
+.footer-brand p { color: var(--ink-faint); font-size: 0.88rem; }
+.footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
+.footer-links a { font-size: 0.88rem; color: var(--ink-soft); }
+.footer-links a:hover { color: var(--violet); }
+.footer-copyright { font-size: 0.8rem; color: var(--ink-faint); border-top: 1px solid var(--border); padding-top: 24px; }
+
+/* ===== Responsive ===== */
+@media (max-width: 860px) {
+  .proof-grid { grid-template-columns: 1fr; }
+  .included-grid { grid-template-columns: repeat(2, 1fr); }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .plan-featured { order: -1; }
+}
+@media (max-width: 560px) {
+  .hero { padding: 64px 0 56px; }
+  .included, .pricing, .proof, .different, .request { padding: 64px 0; }
+  .included-grid { grid-template-columns: 1fr; }
+  .form-row-split { grid-template-columns: 1fr; }
+  .footer-inner { flex-direction: column; }
+}
+
+</style>
 </head>
 <body>
 
@@ -39,7 +444,7 @@
     <div class="wrap hero-inner">
       <p class="eyebrow-pill">From $49/month</p>
       <h1>Everything behind your beauty business.</h1>
-      <p class="hero-sub">We build and run your salon's website, online booking, and owner dashboard — so you focus on clients, not tech.</p>
+      <p class="hero-sub">You focus on clients. We handle the website, the bookings, and the dashboard that ties it together.</p>
       <div class="hero-ctas">
         <a href="#proof" class="btn btn-primary">See how it works</a>
         <a href="#request" class="btn-link">or request your system →</a>
@@ -57,11 +462,11 @@
       <div class="proof-grid">
         <figure class="proof-shot proof-shot-main">
           <img src="assets/red-persimmon-site.png" alt="Red Persimmon Nails & Spa website homepage, built and hosted by Velour Desk" loading="lazy">
-          <figcaption>Their live website</figcaption>
+          <figcaption>Kristy's live website</figcaption>
         </figure>
         <figure class="proof-shot proof-shot-side">
           <img src="assets/red-persimmon-dashboard.png" alt="Red Persimmon's Velour Desk owner dashboard showing busiest days and times" loading="lazy">
-          <figcaption>Their owner dashboard</figcaption>
+          <figcaption>Kristy's owner dashboard</figcaption>
         </figure>
       </div>
 
@@ -142,7 +547,7 @@
     <div class="wrap different-inner">
       <p class="eyebrow">Why it's different</p>
       <h2>One system. Not five tools stitched together.</h2>
-      <p class="section-sub">Most salons duct-tape together a website, a booking app, a POS, and a spreadsheet. Velour Desk is one system we build and maintain for you — so nothing breaks between tools, and nothing falls on you to manage.</p>
+      <p class="section-sub">Most salons end up running a website, a booking app, a POS, and a spreadsheet that don't talk to each other. We build one system instead — and we're the ones who keep it running, not you.</p>
     </div>
   </section>
 
@@ -219,14 +624,12 @@
           <div>
             <label for="phone">Phone</label>
             <input type="tel" id="phone" name="phone" autocomplete="tel" required
-              inputmode="tel" maxlength="20" placeholder="(603) 555-1234"
-              pattern="^[0-9+\-\s\(\)]{7,20}$"
-              title="Enter a valid phone number (7–20 digits, spaces, dashes, or parentheses allowed)">
+              inputmode="tel" maxlength="16" placeholder="+1 (000) 000-0000">
           </div>
           <div>
             <label for="email">Email</label>
             <input type="email" id="email" name="email" autocomplete="email" required
-              maxlength="200" placeholder="you@example.com">
+              maxlength="200" placeholder="you@gmail.com">
           </div>
         </div>
         <div class="form-row">
@@ -238,9 +641,45 @@
             <option value="Full system with POS (waitlist)">Full system with POS — $349/mo (waitlist)</option>
           </select>
         </div>
+        <div class="form-row form-row-split">
+          <div>
+            <label for="has_website">Do you already have a website?</label>
+            <select id="has_website" name="has_website">
+              <option value="">Prefer not to say</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+              <option value="Not sure">Not sure / it's outdated</option>
+            </select>
+          </div>
+          <div>
+            <label for="booking_method">How do clients book now?</label>
+            <select id="booking_method" name="booking_method">
+              <option value="">Prefer not to say</option>
+              <option value="Phone calls">Phone calls</option>
+              <option value="Instagram or Facebook">Instagram or Facebook</option>
+              <option value="Walk-ins only">Walk-ins only</option>
+              <option value="Another booking app">Another booking app</option>
+            </select>
+          </div>
+        </div>
         <div class="form-row">
-          <label for="needs">What do you need?</label>
-          <textarea id="needs" name="needs" rows="3" maxlength="2000" placeholder="A few words about your salon and what you're looking for."></textarea>
+          <label>What services do you offer?</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Nails"> Nails</label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Hair"> Hair</label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Spa & Facials"> Spa &amp; Facials</label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Lashes & Brows"> Lashes &amp; Brows</label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Barbering"> Barbering</label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Other"> Other</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="chairs_count">How many chairs or technicians?</label>
+          <input type="number" id="chairs_count" name="chairs_count" min="0" max="200" placeholder="e.g. 4">
+        </div>
+        <div class="form-row">
+          <label for="needs">Anything else we should know?</label>
+          <textarea id="needs" name="needs" rows="3" maxlength="2000" placeholder="Optional — a few words about your salon."></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary btn-full" id="submit-btn">Request my system</button>
@@ -268,6 +707,128 @@
   </div>
 </footer>
 
-<script src="script.js"></script>
+<script>
+// ===== Config =====
+// Public by design: this is a Supabase publishable key, safe for client-side use.
+// It only allows inserting a row into marketing_leads under RLS — see the
+// project's Supabase policies for what it can and cannot do.
+const SUPABASE_URL = "https://hydhezpeuhqhcugnpupu.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_bBLfdOHavYjMCDFxZzyBdg_FAOyHGQD";
+
+// ===== Footer year =====
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// ===== Pricing CTA -> pre-fill plan interest =====
+document.querySelectorAll(".plan-cta").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const plan = btn.getAttribute("data-plan");
+    const select = document.getElementById("plan_interest");
+    if (plan && select) {
+      const match = Array.from(select.options).find((o) => o.value === plan);
+      if (match) select.value = plan;
+    }
+  });
+});
+
+// ===== Phone auto-format =====
+const phoneInput = document.getElementById("phone");
+phoneInput.addEventListener("input", () => {
+  let digits = phoneInput.value.replace(/\D/g, "");
+  if (digits.length > 0 && digits[0] === "1") digits = digits.slice(1);
+  digits = digits.slice(0, 10);
+
+  let formatted = "";
+  if (digits.length > 0) formatted = "+1 (" + digits.slice(0, 3);
+  if (digits.length >= 3) formatted += ") " + digits.slice(3, 6);
+  if (digits.length >= 6) formatted += "-" + digits.slice(6, 10);
+
+  phoneInput.value = formatted;
+});
+
+// ===== Lead form submission =====
+const form = document.getElementById("lead-form");
+const statusEl = document.getElementById("form-status");
+const submitBtn = document.getElementById("submit-btn");
+
+function setStatus(message, state) {
+  statusEl.textContent = message;
+  statusEl.setAttribute("data-state", state || "");
+}
+
+function isValidEmail(value) {
+  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value);
+}
+
+function isValidPhone(value) {
+  // Strip everything but digits, then check for a sane digit count.
+  // Covers US numbers with/without country code, and basic international.
+  const digits = value.replace(/\D/g, "");
+  return digits.length >= 7 && digits.length <= 15;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  setStatus("", "");
+
+  const services = Array.from(form.querySelectorAll('input[name="services"]:checked'))
+    .map((el) => el.value)
+    .join(", ");
+
+  const data = {
+    name: form.name.value.trim(),
+    salon_name: form.salon_name.value.trim(),
+    phone: form.phone.value.trim(),
+    email: form.email.value.trim(),
+    plan_interest: form.plan_interest.value,
+    has_website: form.has_website.value || null,
+    booking_method: form.booking_method.value || null,
+    services_offered: services || null,
+    chairs_count: form.chairs_count.value ? parseInt(form.chairs_count.value, 10) : null,
+    needs: form.needs.value.trim() || null,
+  };
+
+  if (!data.name || !data.salon_name || !data.phone || !data.email) {
+    setStatus("Please fill in your name, salon name, phone, and email.", "error");
+    return;
+  }
+  if (!isValidEmail(data.email)) {
+    setStatus("That email address doesn't look right — please check it.", "error");
+    return;
+  }
+  if (!isValidPhone(data.phone)) {
+    setStatus("That phone number doesn't look right — please check it.", "error");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending…";
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/marketing_leads`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_PUBLISHABLE_KEY,
+        "Authorization": `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+        "Prefer": "return=minimal",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Request failed: ${res.status}`);
+    }
+
+    form.reset();
+    setStatus("Got it — we'll be in touch within a day.", "success");
+  } catch (err) {
+    setStatus("Something went wrong sending that. Please try again, or call/text directly.", "error");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Request my system";
+  }
+});
+
+</script>
 </body>
 </html>
